@@ -6,6 +6,12 @@ export default function Footer() {
     <footer className="mt-16 border-t border-brand-light/60 bg-white">
       <div className="mx-auto grid max-w-6xl gap-8 px-4 py-10 sm:grid-cols-3">
         <div>
+          <img
+            src="/logo.png"
+            alt={storeConfig.name}
+            className="h-10 w-auto"
+            onError={(e) => { e.currentTarget.style.display = 'none' }}
+          />
           <p className="font-display text-lg text-plum">{storeConfig.name}</p>
           <p className="mt-1 text-sm text-ink-soft">{storeConfig.tagline}</p>
         </div>
