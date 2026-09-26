@@ -1,0 +1,23 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply bg-brand-pale text-ink font-sans;
+}
+
+::selection {
+  @apply bg-brand-light text-plum;
+}
+
+.focus-ring {
+  @apply outline-none focus-visible:ring-2 focus-visible:ring-brand-dark focus-visible:ring-offset-2 focus-visible:ring-offset-brand-pale;
+}
+
+.input {
+  @apply w-full rounded-lg border border-brand-light bg-white px-3 py-2 text-sm text-ink focus-ring;
+}
