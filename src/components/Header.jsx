@@ -22,8 +22,14 @@ export default function Header() {
   return (
     <header className="sticky top-0 z-40 border-b border-brand-light/60 bg-white/95 backdrop-blur">
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3">
-        <Link to="/" className="font-display text-xl text-plum focus-ring rounded">
-          {storeConfig.name}
+        <Link to="/" className="focus-ring flex items-center gap-2 rounded">
+          <img
+            src="/logo.png"
+            alt={storeConfig.name}
+            className="h-9 w-auto sm:h-10"
+            onError={(e) => { e.currentTarget.style.display = 'none' }}
+          />
+          <span className="font-display text-xl text-plum">{storeConfig.name}</span>
         </Link>
 
         <nav className="hidden items-center gap-6 text-sm md:flex">
