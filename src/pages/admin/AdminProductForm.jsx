@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { productImageUrl, supabase } from '../../lib/supabaseClient'
-import { categories, clothingSizes } from '../../lib/storeConfig'
+import { categories } from '../../lib/storeConfig'
 
 function slugify(text) {
   return text
@@ -40,7 +40,14 @@ export default function AdminProductForm() {
       setProduct({ ...emptyProduct, ...data })
       setMainImagePath(data.main_image || '')
       setImagePaths(data.images || [])
-      setVariants(data.product_variants || [])
+      setVariants(
+        (data.product_variants || []).map((v) => ({
+          ...v,
+          color: v.color ?? '',
+          size: v.size ?? '',
+          stock: v.stock ?? 0,
+        }))
+      )
     })
   }, [id, isEditing])
 
@@ -196,23 +203,29 @@ export default function AdminProductForm() {
 
         {isClothing && (
           <div>
-            <p className="mb-2 text-sm font-semibold text-ink">Cores, tamanhos e estoque</p>
+            <p className="mb-1 text-sm font-semibold text-ink">Cores, tamanhos e estoque</p>
+            <p className="mb-2 text-xs text-ink-soft">
+              O tamanho aceita letras (P, M, G) ou números (36, 38, 40...). Se a peça não tiver
+              cor específica (ex: jeans), deixe o campo "Cor" em branco.
+            </p>
             <div className="space-y-2">
               {variants.map((v, i) => (
                 <div key={i} className="flex items-center gap-2">
                   <input
-                    placeholder="Cor (ex: Preto)"
-                    value={v.color}
+                    placeholder="Cor (ex: Preto) — deixe em branco se não houver cor"
+                    value={v.color || ''}
                     onChange={(e) => updateVariant(i, 'color', e.target.value)}
                     className="input flex-1"
                   />
-                  <select value={v.size} onChange={(e) => updateVariant(i, 'size', e.target.value)} className="input w-24">
-                    <option value="">Tam.</option>
-                    {clothingSizes.map((s) => <option key={s} value={s}>{s}</option>)}
-                  </select>
+                  <input
+                    placeholder="Tamanho (ex: M ou 40)"
+                    value={v.size || ''}
+                    onChange={(e) => updateVariant(i, 'size', e.target.value)}
+                    className="input w-28"
+                  />
                   <input
                     type="number" min="0" placeholder="Estoque"
-                    value={v.stock}
+                    value={v.stock ?? 0}
                     onChange={(e) => updateVariant(i, 'stock', e.target.value)}
                     className="input w-24"
                   />
@@ -246,15 +259,6 @@ function Field({ label, children }) {
     <label className="block text-sm">
       <span className="mb-1 block font-medium text-ink">{label}</span>
       {children}
-    </label>
-  )
-}
-
-function Checkbox({ label, checked, onChange }) {
-  return (
-    <label className="flex items-center gap-2">
-      <input type="checkbox" checked={checked} onChange={(e) => onChange(e.target.checked)} className="h-4 w-4 rounded border-brand-light text-brand focus:ring-brand" />
-      {label}
     </label>
   )
 }
